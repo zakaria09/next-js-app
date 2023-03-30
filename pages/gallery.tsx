@@ -7,24 +7,16 @@ import { Card, CardContent, CardMedia, Container, Typography } from '@mui/materi
 import styles from '../styles/gallery.module.scss';
 import React from 'react'
 import { ImageDialog } from '@/components/dialog/imageDialog'
+import useSWR from "swr";
 
-export const getStaticProps = async () => {
-  let resp;
-  try {
-    const token = process.env.NEXT_PUBLIC_INSTA_TOKEN;
-    const { data } = await axios.get(`https://graph.instagram.com/me/media?fields=id,media_type,media_url,caption&limit=24&access_token=${token}`);
-    resp = data;
-  } catch (error) {
-    resp = [];
-  }
-  return {
-    props: {
-      instaImages: resp
-    }
-  }
+export const getAllInstaPosts = async () => {
+  const { data } =
+    await axios.get(`https://v1.nocodeapi.com/zakaria09/instagram/EsbcLkLfkmUCHwhh`);
+  return data;
 }
 
-export default function Gallery({ instaImages }: any) {
+export default function Gallery() {
+  const { data, error } = useSWR("/api/profile-data", getAllInstaPosts);
   const [open, setOpen] = React.useState(false);
   const [ postId, setPostId ] = React.useState<any>();
 
@@ -50,7 +42,7 @@ export default function Gallery({ instaImages }: any) {
           <Container >
             <div className={styles['insta-grid-wrapper']}>
               { 
-                instaImages.data.map((img, i) =>
+                data && data.data.map((img, i) =>
                 <>
                   <Card 
                     className={styles['insta-grid-wrapper__card']}  
