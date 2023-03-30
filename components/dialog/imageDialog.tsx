@@ -2,8 +2,9 @@ import { Box, CircularProgress, Dialog, DialogContent, DialogContentText, Dialog
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
+import Image from "next/image"
 
-interface InstaPost {
+export interface InstaPost {
   caption: string;
   media_url: string;
   media_type: 'CAROUSEL_ALBUM' | 'IMAGE' | 'VIDEO';
@@ -20,16 +21,23 @@ export const ImageDialog = ({ id, open, onClose }: any) => {
 
   return (
     <Dialog maxWidth="xs" open={open} onClose={onClose}>
-
-      {
-        isLoading && <Box sx={{ display: "flex", height: "400px", width: "400px", justifyContent: "center", alignItems: "center" }}>
+      {isLoading && (
+        <Box
+          sx={{
+            display: "flex",
+            height: "400px",
+            width: "400px",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           {" "}
           <CircularProgress />
         </Box>
-      }
+      )}
 
       <DialogContent>
-        <img src={data?.media_url} alt="" />
+        <Image src={data?.media_url} height={500} width={500} alt="" />
       </DialogContent>
       <DialogContentText>
         <div className="pb-5 px-6">
