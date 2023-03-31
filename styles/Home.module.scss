@@ -9,8 +9,13 @@
     max-width: 100%;
 }
 
-.dust {
+.container {
     @apply w-full h-screen grid place-content-center;
-    z-index: 10000;
 }
 
+/* Small screens */
+@media only screen and (max-width: 600px) {
+    .container {
+        height: calc(100vh - 6rem);
+    }
+}

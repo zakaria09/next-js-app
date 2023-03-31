@@ -56,14 +56,11 @@ h1, h2 {
 
 
 .parallax-section {
-    min-height: 100vh;
     border-bottom: #f1f1f1 solid 5px;
-    @apply p-0 flex items-center content-center	w-screen relative;
+    @apply p-0 flex items-center content-center h-screen w-screen relative bg-cover bg-center;
     &__bg {
-        @apply absolute top-0 left-0 right-0 bottom-0 bg-cover	bg-center;
+        // @apply bg-fixed absolute top-0 left-0 right-0 bottom-0 bg-cover bg-center;
         z-index: -1;
-        min-height: 100%;
-        background-attachment: fixed;
     }
     &__textarea {
         @apply w-full p-4;

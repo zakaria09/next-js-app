@@ -3,6 +3,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import Image from "next/image"
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 
 export interface InstaPost {
   caption: string;
@@ -37,7 +38,7 @@ export const ImageDialog = ({ id, open, onClose }: any) => {
       )}
 
       <DialogContent>
-        <Image src={data?.media_url} height={500} width={500} alt="" />
+        <LazyLoadImage src={data?.media_url} height={500} width={500} alt="" />
       </DialogContent>
       <DialogContentText>
         <div className="pb-5 px-6">

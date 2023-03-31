@@ -12,14 +12,15 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className='layout'>
-        <section className={styles['home_bg_body']}>          
-          <main >
+      <div className="layout">
+        <section className={styles["home_bg_body"]}>
+          <main>
             <div className={styles.hero_bg}>
-              <div className={styles.dust}>
+              <div className={styles.container}>
                 <Link className="hero_area" href="/portfolio">
-                  
-                  <h1 className='text-zinc-50	lg:text-6xl text-2xl prose prose-stone'>欢迎 Zulu Vision 来到</h1>
+                  <h1 className="text-zinc-50	lg:text-6xl text-2xl prose prose-stone">
+                    欢迎 Zulu Vision 来到
+                  </h1>
                   <span className="hero_area__top"></span>
                   <span className="hero_area__right"></span>
                   <span className="hero_area__bottom"></span>
@@ -31,5 +32,5 @@ export default function Home() {
         </section>
       </div>
     </>
-  )
+  );
 }
