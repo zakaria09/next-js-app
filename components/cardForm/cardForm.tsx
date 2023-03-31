@@ -124,7 +124,7 @@ const CardForm = ({ newCard }: {newCard: (value: any) => void}) => {
               ]}
             />
           </div>
-          <div className='border-4 border-red-900 border-solid w-full'>
+          <div className=' w-full'>
             <Button
               type="submit"
               variant="contained"

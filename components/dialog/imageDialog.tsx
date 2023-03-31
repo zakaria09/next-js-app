@@ -21,9 +21,10 @@ export const ImageDialog = ({ id, open, onClose }: any) => {
   );
 
   return (
+    <>
     <Dialog maxWidth="xs" open={open} onClose={onClose}>
-      {isLoading && (
-        <Box
+      {
+        isLoading ? (<Box
           sx={{
             display: "flex",
             height: "400px",
@@ -34,19 +35,22 @@ export const ImageDialog = ({ id, open, onClose }: any) => {
         >
           {" "}
           <CircularProgress />
-        </Box>
-      )}
-
-      <DialogContent>
-        <LazyLoadImage src={data?.media_url} height={500} width={500} alt="" />
-      </DialogContent>
-      <DialogContentText>
-        <div className="pb-5 px-6">
-          <Typography align="left" variant="subtitle1" component="h2">
-            {data?.caption}
-          </Typography>
-        </div>
-      </DialogContentText>
+        </Box>) : (
+          <>
+            <DialogContent>
+              <LazyLoadImage src={data?.media_url} height={500} width={500} alt="" />
+            </DialogContent>
+            <DialogContentText>
+              <div className="pb-5 px-6">
+                <Typography align="left" variant="subtitle1" component="h2">
+                  {data?.caption}
+                </Typography>
+              </div>
+            </DialogContentText>
+          </>
+      )
+    }
     </Dialog>
+    </>
   );
 }

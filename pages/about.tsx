@@ -1,5 +1,4 @@
 import Head from "next/head";
-import Navigation from "@/components/navigation/navigation";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "@/context/AuthUserContext";
 import styles from "../styles/about.module.scss";
@@ -13,12 +12,14 @@ import {
   doc,
   setDoc,
   addDoc,
+  updateDoc,
 } from "firebase/firestore";
-import firebase_app, { db, storage } from "@/lib/firebase";
+import { db, storage } from "@/lib/firebase";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { v4 } from "uuid";
 import { Button, CircularProgress } from "@mui/material";
-import photo from "../public/img/459900120008.jpg";
+import Chrome from "react-color/lib/components/chrome/Chrome";
+import { ColorResult } from "react-color";
 
 interface firebaseCards extends Card {
   id: string;
@@ -33,6 +34,7 @@ export default function About() {
     Array<{ id: string; text: string }>
   >([]);
 
+  const [bgColour, setBgColour] = useState<Array<{ color: string; id: string }>>([])
   const [isAuth, setAuth] = useState<boolean>();
 
   useEffect(() => {
@@ -48,6 +50,7 @@ export default function About() {
           ...doc.data(),
         }));
         setCards(data);
+        setBgColour(data.map((d: any) => ({ color: d.bgColour, id: d.id })));
       })
       .catch((error) => {
         console.log("Error getting documents: ", error);
@@ -96,6 +99,42 @@ export default function About() {
     );
   };
 
+  const handleChangeText = (
+    text: any,
+    id: string,
+    type: "text" | "heading"
+  ) => {
+    const aboutRef = doc(db, "about_card", id);
+    if (type === "text")
+      updateDoc(aboutRef, {
+        text: text,
+      });
+    else if (type === "heading")
+      updateDoc(aboutRef, {
+        heading: text,
+      });
+  };
+
+  const handleBgColour = (colour: ColorResult, id: string) => {
+    setBgColour((prev) => [
+      ...prev.filter((c) => c.id !== id),
+      {
+        id,
+        color: colour.hex
+      }
+    ])
+  };
+
+  const findColor = (id: string) =>
+    bgColour.find((c) => c.id === id)?.color || "#1E241F";
+
+  const updateColour = (id: string) => {
+    const aboutRef = doc(db, "about_card", id);
+    updateDoc(aboutRef, {
+      bgColour: findColor(id),
+    });
+  };
+
   return (
     <>
       <Head>
@@ -110,10 +149,7 @@ export default function About() {
           property="og:url"
           content="https://zulu-vision.vercel.app/about"
         />
-        <meta
-          property="og:description"
-          content="Welcome to Zulu Vision"
-        />
+        <meta property="og:description" content="Welcome to Zulu Vision" />
         <meta property="og:type" content="website" />
         <meta
           property="og:image"
@@ -155,21 +191,32 @@ export default function About() {
           {cards.map((card, index) => (
             <>
               <SectionImage
+                id={card.id}
                 heading={card.heading}
                 text={card.text}
                 img={card.img}
-                bgColour={card.bgColour}
+                bgColour={findColor(card.id)}
                 reverse={(index + 1) % 2 === 0}
                 key={card.id}
+                changeText={handleChangeText}
               />
               {isAuth && (
-                <div>
+                <div className="flex justify-center p-4">
+                  <Chrome
+                    color={findColor(card.id)}
+                    onChange={(colour) => handleBgColour(colour, card.id)}
+                    disableAlpha={true}
+                  />
+                </div>
+              )}
+              {isAuth && (
+                <div className="flex justify-center p-4">
                   <Button
-                    className="bg-red-900"
                     type="button"
                     variant="contained"
+                    onClick={() => updateColour(card.id)}
                   >
-                    Delete
+                    Save Background Colour
                   </Button>
                 </div>
               )}
@@ -181,6 +228,9 @@ export default function About() {
               <CardForm newCard={handleNewCard} />
             </div>
           )}
+
+          {/* remove layout hack */}
+          {!isAuth && <div className={styles.space}></div>}
         </section>
       </div>
     </>

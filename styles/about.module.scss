@@ -31,6 +31,12 @@
   color: #7B6535;
 }
 
+@media only screen and (max-width: 600px) {
+  .space {
+    @apply h-24;
+  }
+}
+
 @media only screen and (min-width: 600px) {
   .intro {
     min-height: calc(100vh - 6rem);
