@@ -57,16 +57,16 @@ h1, h2 {
 
 .parallax-section {
     border-bottom: #f1f1f1 solid 5px;
-    @apply p-0 flex items-center content-center h-screen w-screen relative bg-cover bg-center;
+    @apply p-0 flex relative;
+    z-index: -20;
     &__bg {
-        // @apply bg-fixed absolute top-0 left-0 right-0 bottom-0 bg-cover bg-center;
-        z-index: -1;
+      @apply items-center content-center h-screen w-screen bg-cover bg-center object-cover ;
     }
     &__textarea {
-        @apply w-full p-4;
-        background-color: rgba($color: #000000, $alpha: 0.5);
+        @apply w-full p-4 absolute inset-y-1/2	;
         &__heading {
-            @apply text-stone-50 m-0 text-5xl text-center uppercase;
+            background-color: rgba($color: #000000, $alpha: 0.5);
+            @apply text-stone-50 m-0 text-5xl text-center uppercase py-4;
             text-shadow: 2px 2px 2px rgba($color: #000000, $alpha: 0.4);
         }
     }

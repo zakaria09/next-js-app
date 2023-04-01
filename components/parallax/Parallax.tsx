@@ -1,13 +1,18 @@
 import React from 'react'
 import { TypeAnimation } from 'react-type-animation';
+import Image from "next/image";
 
 export default function Parallax({ imgUrl, headings }: { imgUrl: string, headings: Array<{ text: string; delay: number }>  }) {
   return (
-    <div
-      className="parallax-section"
-      style={{ backgroundImage: `url(${imgUrl})` }}
-    >
-      <div className={`parallax-section__bg`}></div>
+    <div className="parallax-section">
+      <Image
+        src={imgUrl}
+        className={`parallax-section__bg`}
+        objectPosition="center"
+        width={800}
+        height={800}
+        alt=""
+      />
       <div className="parallax-section__textarea">
         <TypeAnimation
           sequence={[

@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import styles from '@/styles/Home.module.scss'
 import Link from 'next/link'
-import Navigation from '@/components/navigation/navigation'
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -15,18 +15,26 @@ export default function Home() {
       <div className="layout">
         <section className={styles["home_bg_body"]}>
           <main>
-            <div className={styles.hero_bg}>
-              <div className={styles.container}>
-                <Link className="hero_area" href="/portfolio">
-                  <h1 className="text-zinc-50	lg:text-6xl text-2xl prose prose-stone">
-                    欢迎 Zulu Vision 来到
-                  </h1>
-                  <span className="hero_area__top"></span>
-                  <span className="hero_area__right"></span>
-                  <span className="hero_area__bottom"></span>
-                  <span className="hero_area__left"></span>
-                </Link>
-              </div>
+            <Image
+              src={
+                "https://firebasestorage.googleapis.com/v0/b/zulu-vision.appspot.com/o/459900110001.jpg?alt=media&token=59ffe85b-0d25-4cab-9803-bf16fb7916ba"
+              }
+              className={styles.hero_bg}
+              objectPosition="center"
+              layout="fill"
+              objectFit="cover"
+              alt=""
+            />
+            <div className={styles.container}>
+              <Link className="hero_area" href="/portfolio">
+                <h1 className="text-zinc-50	lg:text-6xl text-2xl prose prose-stone">
+                  欢迎 Zulu Vision 来到
+                </h1>
+                <span className="hero_area__top"></span>
+                <span className="hero_area__right"></span>
+                <span className="hero_area__bottom"></span>
+                <span className="hero_area__left"></span>
+              </Link>
             </div>
           </main>
         </section>

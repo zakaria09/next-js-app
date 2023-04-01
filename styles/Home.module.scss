@@ -1,10 +1,9 @@
 
 .home_bg_body {
-    @apply bg-[url('/img/459900110001.jpg')]  bg-no-repeat bg-cover w-full h-screen ;
+    @apply bg-no-repeat bg-cover w-full h-screen ;
 }
 
 .hero_bg {
-    // height: 100vh;
     overflow-y: hidden;
     max-width: 100%;
 }
