@@ -3,32 +3,99 @@ import Link from 'next/link'
 import Navigation from '@/components/navigation/navigation'
 import axios from "axios"
 import { LazyLoadImage } from 'react-lazy-load-image-component'
-import { Card, CardContent, CardMedia, Container, Typography } from '@mui/material'
+import { Box, Button, Card, CardContent, CardMedia, CircularProgress, Container, Typography } from '@mui/material'
 import styles from '../styles/gallery.module.scss';
-import React from 'react'
-import { ImageDialog, InstaPost } from '@/components/dialog/imageDialog'
+import React, { useEffect, useState } from 'react'
+import { ImageDialog } from '@/components/dialog/imageDialog'
 import useSWR from "swr";
 
-export const getAllInstaPosts = async () => {
-  const { data } =
-    await axios.get(`https://v1.nocodeapi.com/zakaria09/instagram/EsbcLkLfkmUCHwhh`);
-  return data;
+
+export interface InstaPost {
+  caption: string;
+  media_url: string;
+  media_type: "CAROUSEL_ALBUM" | "IMAGE" | "VIDEO";
+  id: string;
+  timestamp: string;
+  children?: {
+    data: Array<{ id: string; media_url: string }>;
+  };
+  thumbnail_url?: string;
 }
 
 export default function Gallery() {
-  const { data, error } = useSWR("/api/profile-data", getAllInstaPosts);
+  const getAllInstaPosts = async () => {
+    const { data } = await axios.get(
+      `https://v1.nocodeapi.com/zakaria09/instagram/EsbcLkLfkmUCHwhh?limit=50${next ? `?after=${next}`: ''}`
+    );
+    return data;
+  };
+  
+  const {
+    data,
+    isLoading,
+    error,
+  }: {
+    data: {
+      data: InstaPost;
+      paging: {
+        cursors: {
+          before: string;
+          after: string;
+        };
+      };
+    };
+    isLoading: boolean;
+    error: any;
+  } = useSWR("/api/profile-data", getAllInstaPosts);
   const [open, setOpen] = React.useState(false);
   const [ postId, setPostId ] = React.useState<any>();
+  const [next, setNext] = useState<string | undefined>();
 
   const handleClickOpen = (id: string) => {
     setPostId(id);
-    console.log(id);
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
   };
+
+  const renderInsta = () => {
+    if (isLoading) return (
+      <Box
+        sx={{
+          display: "flex",
+          height: "100vh",
+          width: "100vw",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        {" "}
+        <CircularProgress />
+      </Box>
+    );
+    else if (data) return data.data.map((img: InstaPost, i: number) => (
+      <>
+        <Card
+          className={styles["insta-grid-wrapper__card"]}
+          sx={{ maxWidth: 400 }}
+          onClick={() => handleClickOpen(img.id)}
+          key={img.id}
+        >
+          <CardMedia
+            component={"img"}
+            className={styles["insta-grid-wrapper__post"]}
+            src={
+              img.media_type === 'CAROUSEL_ALBUM' || img.media_type 
+              === 'IMAGE' ? img.media_url : img.thumbnail_url}
+            alt={img.caption}
+          ></CardMedia>
+        </Card>
+      </>
+    ));
+  }
+
   return (
     <>
       <Head>
@@ -41,25 +108,15 @@ export default function Gallery() {
         <section>
           <Container>
             <div className={styles["insta-grid-wrapper"]}>
-              {data &&
-                data.data.map((img: InstaPost, i: number) => (
-                  <>
-                    <Card
-                      className={styles["insta-grid-wrapper__card"]}
-                      sx={{ maxWidth: 400 }}
-                      onClick={() => handleClickOpen(img.id)}
-                      key={img.id}
-                    >
-                      <CardMedia
-                        component={"img"}
-                        className={styles["insta-grid-wrapper__post"]}
-                        src={img.media_url}
-                        alt={img.caption}
-                        key={i}
-                      ></CardMedia>
-                    </Card>
-                  </>
-                ))}
+              {renderInsta()}
+            </div>
+            <div className="flex justify-center py-6 ">
+              <Button 
+                type="button" 
+                variant="outlined"
+                onClick={() => setNext(data.paging.cursors.after)}>
+                Load more
+              </Button>
             </div>
             <ImageDialog open={open} onClose={handleClose} id={postId} />
           </Container>

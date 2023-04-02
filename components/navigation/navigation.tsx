@@ -41,7 +41,7 @@ export default function Navigation() {
                 }}
                 key={idx}
             >
-                <NavItem text={menu.text} href={menu.href} activePath={router.pathname} />
+                <NavItem text={menu.text} href={menu.href} isActive={router.pathname === menu.href} />
             </li>
             ))}
         </ul>

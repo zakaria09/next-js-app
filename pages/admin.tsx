@@ -73,7 +73,7 @@ export default function Admin() {
                   helperText={formik.touched.password && formik.errors.password}
                   />
                 <div className='my-2'>
-                  <Button type='submit' variant="contained">Login</Button>
+                  <Button type='submit' variant="outlined">Login</Button>
                 </div>
               </div>
             </div>

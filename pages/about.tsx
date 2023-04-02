@@ -213,7 +213,7 @@ export default function About() {
                 <div className="flex justify-center p-4">
                   <Button
                     type="button"
-                    variant="contained"
+                    variant="outlined"
                     onClick={() => updateColour(card.id)}
                   >
                     Save Background Colour

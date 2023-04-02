@@ -1,12 +1,12 @@
 @import 'tailwindcss/base';
-@layer base {
-  button {
-    background-color: #1976d2 !important;
-  }
-}
+// @layer base {
+//   button {
+//     background-color: #1976d2 !important;
+//   }
+// }
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
-
+@import "react-slideshow-image/dist/styles.css";
 
 body {
   line-height: 1.6;

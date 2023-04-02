@@ -94,7 +94,7 @@ const CardForm = ({ newCard }: {newCard: (value: any) => void}) => {
                         />
                       ))}
                       <Button
-                        variant="contained"
+                        variant="outlined"
                         component="span"
                         startIcon={<i className="ri-file-upload-fill"></i>}
                         onClick={onImageUpload}
@@ -124,12 +124,8 @@ const CardForm = ({ newCard }: {newCard: (value: any) => void}) => {
               ]}
             />
           </div>
-          <div className=' w-full'>
-            <Button
-              type="submit"
-              variant="contained"
-              disabled={isSubmitting}
-            >
+          <div className=" w-full">
+            <Button type="submit" variant="contained" disabled={isSubmitting}>
               Add
             </Button>
           </div>
