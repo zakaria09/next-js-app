@@ -3,7 +3,7 @@ import Link from 'next/link'
 import Navigation from '@/components/navigation/navigation'
 import axios from "axios"
 import { LazyLoadImage } from 'react-lazy-load-image-component'
-import { Box, Button, Card, CardContent, CardMedia, CircularProgress, Container, Typography } from '@mui/material'
+import { Box, Button, Card, CardMedia, CircularProgress, Container } from '@mui/material'
 import styles from '../styles/gallery.module.scss';
 import React, { useEffect, useState } from 'react'
 import { ImageDialog } from '@/components/dialog/imageDialog'
@@ -22,34 +22,49 @@ export interface InstaPost {
   thumbnail_url?: string;
 }
 
-export default function Gallery() {
-  const getAllInstaPosts = async () => {
-    const { data } = await axios.get(
-      `https://v1.nocodeapi.com/zakaria09/instagram/EsbcLkLfkmUCHwhh?limit=50${next ? `?after=${next}`: ''}`
-    );
-    return data;
+interface InstaResp {
+  data: InstaPost[];
+  paging: {
+    cursors: {
+      before: string;
+      after: string;
+    };
   };
-  
+}
+
+const getAllInstaPosts = async (limit: number, next: string) => {
+  const { data } = await axios.get(
+    `https://v1.nocodeapi.com/zakaria09/instagram/EsbcLkLfkmUCHwhh${limit}${
+      next ? `?after=${next}` : ""
+    }`
+  );
+  return data;
+};
+
+export default function Gallery() {
+  const [limit, setLimit] = useState<number>(12);
+  const [next, setNext] = useState<string | undefined>();
   const {
     data,
     isLoading,
     error,
   }: {
-    data: {
-      data: InstaPost;
-      paging: {
-        cursors: {
-          before: string;
-          after: string;
-        };
-      };
-    };
+    data: InstaResp;
     isLoading: boolean;
     error: any;
-  } = useSWR("/api/profile-data", getAllInstaPosts);
+  } = useSWR(() => {
+    if (next) return `?limit=${limit}&after=${next}`;
+    return `?limit=${limit}`;
+  }, getAllInstaPosts);
   const [open, setOpen] = React.useState(false);
   const [ postId, setPostId ] = React.useState<any>();
-  const [next, setNext] = useState<string | undefined>();
+  const [posts, setPosts] = useState<InstaResp | undefined>();
+
+  useEffect(() => {
+    if (data) setPosts((prev) => (
+      { data: [ ...(prev ? prev.data : []), ...data.data], paging: data.paging }
+    ));
+  }, [data])
 
   const handleClickOpen = (id: string) => {
     setPostId(id);
@@ -75,7 +90,7 @@ export default function Gallery() {
         <CircularProgress />
       </Box>
     );
-    else if (data) return data.data.map((img: InstaPost, i: number) => (
+    else if (posts) return posts.data.map((img: InstaPost, i: number) => (
       <>
         <Card
           className={styles["insta-grid-wrapper__card"]}
@@ -118,7 +133,7 @@ export default function Gallery() {
                 Load more
               </Button>
             </div>
-            <ImageDialog open={open} onClose={handleClose} id={postId} />
+            {open && <ImageDialog open={open} onClose={handleClose} id={postId} />}
           </Container>
         </section>
       </div>

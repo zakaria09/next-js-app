@@ -27,7 +27,7 @@ export default function Home() {
             />
             <div className={styles.container}>
               <Link className="hero_area" href="/portfolio">
-                <h1 className="lg:text-9xl text-4xl ">
+                <h1 className="lg:text-4xl text-2xl ">
                   欢迎 Zulu Vision 来到
                 </h1>
                 <span className="hero_area__top"></span>
